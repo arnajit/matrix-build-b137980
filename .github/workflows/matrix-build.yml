@@ -1,0 +1,29 @@
+name: Matrix Build Demo
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        version: [14, 16, 18]   # 3 variants required
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: matrix-b137980
+        run: echo "Building for version ${{ matrix.version }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate build artifact
+        run: |
+          echo "Build output generated for Node version ${{ matrix.version }}" > output-${{ matrix.version }}.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-b137980-v${{ matrix.version }}
+          path: output-${{ matrix.version }}.txt
